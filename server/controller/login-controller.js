@@ -1,11 +1,13 @@
 import express from 'express';
 import user from '../model/User.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
 
 
 export const register = async (req, res) => {
     try {
-        const { firstname, lastname,username,email, password } = req.body;
+        const { firstname, lastname, username, email, password } = req.body;
         if (!(firstname && lastname && email && password)) {
             return res.status(400).send("Please enter all the information");
         }
@@ -14,7 +16,7 @@ export const register = async (req, res) => {
             return res.status(200).send("User already exists!");
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         // save the user in DB
         const user1 = await user.create({
             firstname,
@@ -23,7 +25,12 @@ export const register = async (req, res) => {
             email,
             password: hashedPassword,
         });
-        res.send("User added")
+        const token = jwt.sign({ id: user._id, email }, process.env.SECRET_KEY, {
+            expiresIn: "1d",
+        });
+        user1.token = token;
+        user1.password = undefined;
+        res.status(200).json({ message: "You have successfully registered!", user1 });
     } catch (error) {
         console.log(error);
     }
@@ -49,11 +56,26 @@ export const login = async (req, res) => {
         if (!enteredPassword) {
             return res.status(401).send("Password is incorrect");
         }
-         res.send("logged in")
         //send the token
-        
+        const token = jwt.sign({ id: user._id, email }, process.env.SECRET_KEY, {
+            expiresIn: "1d",
+        });
+        user1.token = token;
+        user1.password = undefined;
+        res.status(200).json({ message: "You have successfully registered!", user1 });
+
+        const options = {
+            expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+            httpOnly: true, //only manipulate by server not by client/user
+        };
+        res.status(200).cookie("token", token, options).json({
+            message: "You have successfully logged in!",
+            success: true,
+            token,
+        });
+
     }
-    catch(error){
+    catch (error) {
         console.log(error);
     }
 }
