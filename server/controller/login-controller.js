@@ -1,11 +1,10 @@
-import express from 'express';
-import user from '../model/User.js';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import cookieParser from 'cookie-parser';
+const express = require('express');
+const user = require('../model/User.js');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
-
-export const register = async (req, res) => {
+const register = async (req, res) => {
     try {
         const { firstname, lastname, username, email, password } = req.body;
         if (!(firstname && lastname && email && password)) {
@@ -36,7 +35,8 @@ export const register = async (req, res) => {
     }
 }
 
-export const login = async (req, res) => {
+
+const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -78,4 +78,8 @@ export const login = async (req, res) => {
     catch (error) {
         console.log(error);
     }
+}
+
+module.exports={
+register,login
 }

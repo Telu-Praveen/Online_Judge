@@ -1,7 +1,7 @@
-import express from 'express';
-import { register } from '../controller/login-controller.js';
-import { login } from '../controller/login-controller.js';
-import { addproblem,getproblems,getproblem} from '../controller/problem-controller.js';
+const express = require('express');
+const { register } = require('../controller/login-controller.js');
+const { login } = require('../controller/login-controller.js');
+const { addproblem,getproblems,getproblem,updateproblem,deleteproblem} = require('../controller/problem-controller.js');
 
 const router = express.Router();
 
@@ -12,9 +12,11 @@ router.get("/login",login);
 //problem
 router.post("/addproblem",addproblem);
 router.get("/getproblems",getproblems);
-router.get("/getproblem",getproblem);
-//router.delete("/deleteproblem",deleteproblem);
-//router.put("/updateproblem",updateproblem);
+router.get("/getproblem/:id",getproblem);
+router.delete("/deleteproblem/:id",deleteproblem);
+router.put("/updateproblem/:id",updateproblem);
 
 
-export default router;
+module.exports={
+    router,
+}

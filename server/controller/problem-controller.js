@@ -1,11 +1,12 @@
-import Problem from "../model/Problem.js";
+const Problem = require('../model/Problem.js');
+const express = require('express');
 
-export const addproblem = async (req, res) => {
+const addproblem = async (req, res) => {
     try {
-        const {statement,name,code,difficuly}=req.body;
+        const { statement, name, code, difficuly } = req.body;
         // save the user in DB
         const existingProblem = await Problem.findOne({ name });
-        if(existingProblem){
+        if (existingProblem) {
             res.send("problem exists already")
         }
         const problem = await Problem.create({
@@ -14,33 +15,61 @@ export const addproblem = async (req, res) => {
             code,
             difficuly,
         });
-        res.send(problem);
+        res.status(200).json({ message: "Problem added successfully!", problem });
     } catch (error) {
         console.log(error);
     }
 }
 
-export const getproblems = async (req, res) => {
+const getproblems = async (req, res) => {
     try {
-        const documents = await Problem.find({});
-        res.send(documents);
-        //console.log(documents.length);
+        const problems = await Problem.find();
+        res.status(200).json({ problems });
     } catch (error) {
         console.log(error);
     }
 }
 
 //get one problem at a time
-export const getproblem = async (req, res) => {
+const getproblem = async (req, res) => {
     try {
-        const {name}=req.body;
-        const document = await Problem.findOne({name});
-        res.send(document);
+        const name = req.params.id;
         console.log(name);
+        const problem = await Problem.findById(req.params.id);
+        if (!problem) return res.status(404).send('Problem not found');
+        res.status(200).json({ problem });
+        //res.send(problem)
     } catch (error) {
         console.log(error);
     }
 }
 
 //update
+const updateproblem = async (req, res) => {
+    try {
+        const problem = await Problem.findByIdAndUpdate(req.params.id, {
+            statement: req.body.statement,
+            name: req.body.name,
+            code: req.body.code,
+        },
+            { new: true });
+        if (!problem) return res.status(404).send('Book not found');
+        res.send(problem);
+    } catch (error) {
+        console.log(error);
+    }
+}
 
+//delete problem
+const deleteproblem = async (req, res) => {
+    try {
+        const problem = await Problem.findByIdAndDelete(req.params.id);
+        if (!problem) return res.status(404).send('Problem not found');
+        res.status(204).send();
+    } catch (error) {
+        console.log(error);
+    }
+}
+module.exports = {
+    updateproblem, addproblem, getproblems, getproblem,deleteproblem,
+}

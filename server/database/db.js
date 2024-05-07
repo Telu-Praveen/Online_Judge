@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
 //import router from "../routes/route";
 
 dotenv.config();
@@ -17,4 +18,6 @@ const DBConnection = async () => {
     }
 }
 
-export default DBConnection;
+module.exports={
+    DBConnection
+}

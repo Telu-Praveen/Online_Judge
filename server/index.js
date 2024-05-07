@@ -1,10 +1,11 @@
-import express from 'express';
-import cors from 'cors';
-import cookieParser from "cookie-parser";
-import router from './routes/route.js';
-import dotenv from 'dotenv'
-import DBConnection from './database/db.js';
-const app=express();
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const app = express();
+const dotenv=require('dotenv');
+const cors  = require('cors');
+const {router} = require('./routes/route.js');
+const {DBConnection} = require('./database/db.js');
+
 
 dotenv.config();
 
@@ -16,4 +17,4 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/",router)
 
-app.listen(8000, () => console.log("server is running"));
+app.listen(8000, () => console.log("server is running "));
