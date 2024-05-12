@@ -1,22 +1,26 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 
 const problemSchema = new mongoose.Schema({
-    statement: {
-        type: String,
-        default: null,
-    },
     name: {
         type: String,
-        unique:true,
-        default: null,
+        required: true,
     },
-    code: {
-        type: String,
-        default: null,
-    },
-    difficulty: {
-        type: String,
-    },
-});
+    statement: { type: String },
+    input: { type: String },
+    whoSolved: [{ type: String }],
+    output: { type: String },
+    constraints: { type: String },
+    timelimit: { type: Number, default: 5.0 },
+    statement: { type: String, required: true },
+    createdBy: { type: String},
+    testcase: [
+        {
+            input: { type: String },
+            output: { type: String },
+        },
+    ],
+},
+    { timestamps: true }
+);
 
 module.exports = mongoose.model('Problem', problemSchema);

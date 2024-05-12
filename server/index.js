@@ -8,7 +8,7 @@ const {DBConnection} = require('./database/db.js');
 
 
 dotenv.config();
-
+const PORT=8000;
 DBConnection();
 app.use(cookieParser());
 app.use(cors());
@@ -17,4 +17,4 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/",router)
 
-app.listen(8000, () => console.log("server is running "));
+app.listen(PORT, () => console.log(`server is running on ${PORT}`));
