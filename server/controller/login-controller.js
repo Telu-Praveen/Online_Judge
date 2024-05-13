@@ -62,12 +62,12 @@ const login = async (req, res) => {
         });
         user1.token = token;
         user1.password = undefined;
-        res.status(200).json({ message: "You have successfully registered!", user1 });
 
         const options = {
             expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
             httpOnly: true, //only manipulate by server not by client/user
         };
+        console.log("success")
         res.status(200).cookie("token", token, options).json({
             message: "You have successfully logged in!",
             success: true,
