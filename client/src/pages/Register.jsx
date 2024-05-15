@@ -3,10 +3,44 @@ import React, { useState } from "react";
 import axios from "axios";
 
 
-function go_to_login_page() {
-    navigate("/login");
-}
 export default function Register() {
+
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate=useNavigate();
+
+  const handleSubmit = async () => {
+    try {
+      event.preventDefault();
+      const payload = {
+        firstname,
+        lastname,
+        username,
+        email,
+        password
+      };
+      const { data } = await axios.post('http://localhost:8000/register', payload)
+      if (data) {
+        console.log(data)
+        if(data=="User already exists!"){
+          console.log("User already exists!");
+        }
+        else{
+          navigate("/dashboard");
+        }
+        
+      }
+    } catch (error) {
+      console.log(error.response.data)
+    }
+
+    //setOutput(data.output);
+  };
+
+
     return (
       <>
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -17,7 +51,7 @@ export default function Register() {
           </div>
   
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" onSubmit={handleSubmit}>
             
             <div>
                 <label htmlFor="firstname" className="block text-sm font-medium leading-6 text-gray-900">
@@ -27,6 +61,8 @@ export default function Register() {
                   <input
                     id="firstname"
                     name="firstname"
+                    value={firstname}
+                  onChange={(event) => setFirstname(event.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -40,6 +76,8 @@ export default function Register() {
                   <input
                     id="lastname"
                     name="lastname"
+                    value={lastname}
+                  onChange={(event) => setLastname(event.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -53,6 +91,8 @@ export default function Register() {
                   <input
                     id="username"
                     name="username"
+                    value={username}
+                  onChange={(event) => setUsername(event.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -67,6 +107,8 @@ export default function Register() {
                     id="email"
                     name="email"
                     type="email"
+                    value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                     autoComplete="email"
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -79,17 +121,15 @@ export default function Register() {
                   <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                     Password
                   </label>
-                  <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
-                    </a>
-                  </div>
                 </div>
                 <div className="mt-2">
                   <input
                     id="password"
                     name="password"
                     type="password"
+                    value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  
                     autoComplete="current-password"
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -111,6 +151,10 @@ export default function Register() {
               Already a member?{' '}
               <a href="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"  >
                 Login
+              </a>
+
+              <a  className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"  >
+                
               </a>
             </p>
           </div>
