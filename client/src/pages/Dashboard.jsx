@@ -1,35 +1,64 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+} from '@mui/material';
 
+const Dashboard = () => {
+  const [problems, setProblems] = useState([]);
 
-const people = [];
-const fetchData = async () => {
-  try {
-    const response = await axios.get("http://localhost:8000/getproblems");
-    //console.log(response.data.problems);
-    for(var i=0;i<response.data.problems.length;i++){
-      people.push(response.data.problems[i])
-    }
-    console.log(people)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/getproblems');
+        console.log('API Response:', response); // Debugging
+        if (response.data && response.data.problems) {
+          setProblems(response.data.problems);
+        } else {
+          console.error('API response does not contain problems');
+        }
+      } catch (error) {
+        console.error('Error fetching problems:', error);
+      }
+    };
 
-  } catch (error) {
-    // Handle error
-    console.error(error);
+    fetchData();
+  }, []);
+
+  if (problems.length === 0) {
+    return <div>Loading or No Problems Found...</div>;
   }
-};
 
-
-export default function Example() {
   return (
     <div>
-      <button onClick={fetchData}>button</button>
-    <ul role="list" className="divide-y divide-gray-100">
-        <li className="flex justify-between gap-x-6 py-5">
-          <div className="flex min-w-0 gap-x-4">
-          <p className="text-sm font-semibold leading-6 text-gray-900">{people.name}</p>
-          </div>
-        </li>
-    </ul>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align='center'>Problem List</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {problems.map((problem) => (
+              <TableRow key={problem._id}>
+                <TableCell align='center'>
+                  <Link to={`/solve/${problem._id}`}>{problem.name}</Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
-  )
-}
+  );
+};
+
+export default Dashboard;

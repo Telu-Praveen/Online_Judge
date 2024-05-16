@@ -29,7 +29,7 @@ export default function Register() {
           console.log("User already exists!");
         }
         else{
-          navigate("/dashboard");
+          navigate("/login");
         }
         
       }
