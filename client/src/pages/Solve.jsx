@@ -1,16 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Typography,Select, MenuItem, Button, TextField, Box,Grid, Paper } from '@mui/material';
+import CustomMonacoEditor from './CustomMonacoEditor.jsx';
 
 const Solve = () => {
   const { id } = useParams();
   const [problem, setProblem] = useState(null);
-  const [solution, setSolution] = useState("");
+  const [language, setLanguage] = useState('javascript');
+  const [code, setCode] = useState('');
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState('');
+  const [testStatus, setTestStatus] = useState('');
+  const [testcase, setTestCase] = useState('null');
 
   useEffect(() => {
     const fetchProblem = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/getproblem/${id}`);
+        setTestCase(response.data.problem.testcase);
+        console.log(testcase);
         setProblem(response.data.problem);
       } catch (error) {
         console.error(error);
@@ -19,11 +28,41 @@ const Solve = () => {
 
     fetchProblem();
   }, [id]);
+  const handleLanguageChange = (event) => {
+    setLanguage(event.target.value);
+  };
 
-  const handleSolve = async () => {
+  const handleCodeChange = (newValue) => {
+    setCode(newValue);
+  };
+
+  // const handleSolve = async () => {
+  //   try {
+  //     const response = await axios.post(`http://localhost:8000/runproblem/${id}`, { solution });
+  //     alert(response.data.message);
+  //     setOutput(response.data.output);
+  //     setTestStatus(response.data.testStatus);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const handleSubmit = async () => {
     try {
-      const response = await axios.post(`http://localhost:8000/solveproblem/${id}`, { solution });
-      alert(response.data.message);
+      const response = await axios.post(`http://localhost:8000/submit/${id}`, { code, language, input });
+      console.log(response);
+      setOutput(response.data.output);
+      setTestStatus(response.data.testStatus);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handlerun = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/run', { code, language, input });
+      setOutput(response.data.output);
+      setTestStatus(response.data.testStatus);
     } catch (error) {
       console.error(error);
     }
@@ -32,16 +71,79 @@ const Solve = () => {
   if (!problem) return <div>Loading...</div>;
 
   return (
-    <div>
-      <h2>{problem.name}</h2>
-      <p>{problem.statement}</p>
-      <textarea
-        value={solution}
-        onChange={(e) => setSolution(e.target.value)}
-        placeholder="Your solution"
-      />
-      <button onClick={handleSolve}>Submit Solution</button>
-    </div>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={4}>
+        <Paper elevation={3} style={{ padding: '16px', margin: '16px' }}>
+          <Typography variant="h4">{problem.name}</Typography>
+          <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>{problem.statement}</Typography>
+          <Typography variant="h6" style={{ marginTop: '16px' }}>Test Cases</Typography>
+          <p>Sample Input1</p>
+          <Typography variant="body2" style={{ whiteSpace: 'pre-line' }}>{testcase[0].input}</Typography>
+          <p>Sample Output1</p>
+          <Typography variant="body2" style={{ whiteSpace: 'pre-line' }}>{testcase[0].output}</Typography>
+          <p>Sample Input2</p>
+          <Typography variant="body2" style={{ whiteSpace: 'pre-line' }}>{testcase[1].input}</Typography>
+          <p>Sample Output2</p>
+          <Typography variant="body2" style={{ whiteSpace: 'pre-line' }}>{testcase[1].output}</Typography>
+          <Typography variant="h6" style={{ marginTop: '16px' }}>Constraints</Typography>
+          <Typography variant="body2" style={{ whiteSpace: 'pre-line' }}>{problem.constraints}</Typography>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} md={8}>
+        <Paper elevation={3} style={{ padding: '16px', margin: '16px' }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <Select value={language} onChange={handleLanguageChange}>
+              <MenuItem value="javascript">JavaScript</MenuItem>
+              <MenuItem value="python">Python</MenuItem>
+              <MenuItem value="cpp">C++</MenuItem>
+              <MenuItem value="java">Java</MenuItem>
+            </Select>
+          </Box>
+          <Box>
+          <CustomMonacoEditor
+            width="100%"
+            height="400px"
+            language={language}
+            theme="vs-dark"
+            value={code}
+            onChange={handleCodeChange}
+          />
+          </Box>
+          <Box mt={2}>
+            <TextField
+              label="Input"
+              multiline
+              rows={4}
+              variant="outlined"
+              fullWidth
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+          </Box>
+          <Box mt={2}>
+          <Button variant="contained" color="primary" onClick={handlerun} style={{ marginRight: '8px' }}>
+              run
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+              Submit
+            </Button>
+
+          </Box>
+          <Box mt={2}>
+            <Typography variant="h6">Output:</Typography>
+            <Paper style={{ padding: '16px', backgroundColor: '#f5f5f5', minHeight: '50px' }}>
+              <Typography>{output}</Typography>
+            </Paper>
+          </Box>
+          <Box mt={2}>
+            <Typography variant="h6">Test Cases Status:</Typography>
+            <Paper style={{ padding: '16px', backgroundColor: '#f5f5f5', minHeight: '50px' }}>
+              <Typography>{testStatus}</Typography>
+            </Paper>
+          </Box>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 

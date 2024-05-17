@@ -1,7 +1,7 @@
 const express = require('express');
 const { register } = require('../controller/login-controller.js');
 const { login } = require('../controller/login-controller.js');
-const { addproblem,getproblems,getproblem,updateproblem,deleteproblem, runproblem} = require('../controller/problem-controller.js');
+const { addproblem,getproblems,getproblem,updateproblem,deleteproblem, runproblem,submitproblem} = require('../controller/problem-controller.js');
 
 const router = express.Router();
 
@@ -18,6 +18,7 @@ router.put("/updateproblem/:id",updateproblem);
 
 //runproblem
 router.post("/run",runproblem);
+router.post("/submit/:id",submitproblem);
 
 
 module.exports={

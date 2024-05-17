@@ -10,19 +10,21 @@ const addproblem = async (req, res) => {
         if (existingProblem) {
             res.send("problem exists already")
         }
-        const problem = await Problem.create({
-            statement,
-            input,
-            whoSolved,
-            output,
-            constraints,
-            timelimit,
-            createdBy,
-            testcase,
-            name,
-            code,
-        });
-        res.status(200).json({ message: "Problem added successfully!", problem });
+        else{
+            const problem = await Problem.create({
+                statement,
+                input,
+                whoSolved,
+                output,
+                constraints,
+                timelimit,
+                createdBy,
+                testcase,
+                name,
+                code,
+            });
+            res.status(200).json({ message: "Problem added successfully!", problem });
+        }
     } catch (error) {
         console.log(error);
     }
@@ -100,9 +102,38 @@ const runproblem = async (req, res) => {
     }
 }
 
+const submitproblem = async (req, res) => {
+    const { language = 'cpp', code} = req.body;
+    var input=req.body.input;
+    
+    pass=[];
+    try {
+        const problem = await Problem.findById(req.params.id);
+     for(let i=0;i<problem.testcase.length;i++){
+        const filePath = await generateFile(language, code);
+        const inputPath = await generateInputFile(problem.testcase[i].input);
+        const output1 = await execute(filePath, inputPath);
+        console.log(output1+" "+problem.testcase[i].output)
+        if(output1==problem.testcase[i].output){
+
+            console.log((i+1)+" Passed")
+             pass.push((i+1)+" Passed");
+        }
+        else{
+            console.log((i+1)+" Failed")
+            pass.push((i+1)+" Failed");
+        }
+     }
+     console.log(pass)
+     res.json({ pass });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 
 
 module.exports = {
-    updateproblem, addproblem, getproblems, getproblem, deleteproblem, runproblem
+    updateproblem, addproblem, getproblems, getproblem, deleteproblem, runproblem,submitproblem
 }

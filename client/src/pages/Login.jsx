@@ -5,6 +5,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordstatus,setPasswordstatus]=useState("");
 
   const navigate=useNavigate();
   const handleSubmit = async () => {
@@ -21,6 +22,7 @@ export default function Login() {
         
       }
     } catch (error) {
+      setPasswordstatus("Incorrect Password. Please Try again!!");
       console.log(error.response.data)
     }
 
@@ -61,11 +63,6 @@ export default function Login() {
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                   Password
                 </label>
-                <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    Forgot password?
-                  </a>
-                </div>
               </div>
               <div className="mt-2">
                 <input
@@ -97,6 +94,10 @@ export default function Login() {
               register
             </a>
           </p>
+          <p className="mt-10 text-center text-sm text-gray-500">
+            {passwordstatus}
+          </p>
+          
         </div>
       </div>
     </>

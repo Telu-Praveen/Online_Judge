@@ -4,8 +4,8 @@ const problemSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique:true,
     },
-    statement: { type: String },
     input: { type: String },
     whoSolved: [{ type: String }],
     output: { type: String },
