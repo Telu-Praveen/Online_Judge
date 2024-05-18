@@ -112,16 +112,16 @@ const submitproblem = async (req, res) => {
      for(let i=0;i<problem.testcase.length;i++){
         const filePath = await generateFile(language, code);
         const inputPath = await generateInputFile(problem.testcase[i].input);
-        const output1 = await execute(filePath, inputPath);
-        console.log(output1+" "+problem.testcase[i].output)
-        if(output1==problem.testcase[i].output){
+        var output = await execute(filePath, inputPath);
+        output=(String(output)).trim()
+        expectedoutput=(String(problem.testcase[i].output)).trim();
+        console.log(output+" "+expectedoutput)
+        if(output==expectedoutput){
 
-            console.log((i+1)+" Passed")
-             pass.push((i+1)+" Passed");
+             pass.push("Success");
         }
         else{
-            console.log((i+1)+" Failed")
-            pass.push((i+1)+" Failed");
+            pass.push("Fail");
         }
      }
      console.log(pass)

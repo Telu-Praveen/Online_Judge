@@ -17,6 +17,9 @@ export default function Login() {
       };
       const { data } = await axios.post('http://localhost:8000/login', payload)
       if (data) {
+        console.log(data)
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('email', email);
         console.log("navigating to home");
         navigate("/dashboard");
         

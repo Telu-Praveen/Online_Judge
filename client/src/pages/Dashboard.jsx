@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom"
 import axios from 'axios';
 import {
+  Typography,
+  AppBar,
+  Toolbar,
+  Button,
+  Box,
   Table,
   TableBody,
   TableCell,
@@ -9,12 +15,20 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
+  Container,
 } from '@mui/material';
 
 const Dashboard = () => {
   const [problems, setProblems] = useState([]);
-
+  const navigate=useNavigate();
+  const handleLogout = () => {
+    // Clear any authentication tokens or user info stored in local storage
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    navigate("/login")
+    // Redirect to the login page
+    //history.push('/login');
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,24 +53,31 @@ const Dashboard = () => {
 
   return (
     <div>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell align='center'>Problem List</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {problems.map((problem) => (
-              <TableRow key={problem._id}>
-                <TableCell align='center'>
-                  <Link to={`/solve/${problem._id}`}>{problem.name}</Link>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <AppBar position="static">
+      <Toolbar>
+        <Box display="flex" flexGrow={1} justifyContent="center" color="Black">
+          <Typography variant="h6">Problem List</Typography>
+        </Box>
+        <Button color="inherit" onClick={handleLogout}>
+          Log out
+        </Button>
+      </Toolbar>
+    </AppBar> 
+      <Container>
+        <TableContainer component={Paper} style={{ marginTop: '20px' }}>
+          <Table>
+            <TableBody>
+              {problems.map((problem) => (
+                <TableRow key={problem._id}>
+                  <TableCell align="center">
+                    <Link to={`/solve/${problem._id}`}>{problem.name}</Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
     </div>
   );
 };

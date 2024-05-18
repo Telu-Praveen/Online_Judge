@@ -50,9 +50,9 @@ const Solve = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(`http://localhost:8000/submit/${id}`, { code, language, input });
-      console.log(response);
-      setOutput(response.data.output);
-      setTestStatus(response.data.testStatus);
+      console.log(response.data.pass);
+      //setOutput(response.data.output);
+      setTestStatus(response.data.pass);
     } catch (error) {
       console.error(error);
     }
