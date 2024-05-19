@@ -7,7 +7,13 @@ const problemSchema = new mongoose.Schema({
         unique:true,
     },
     input: { type: String },
-    whoSolved: [{ type: String }],
+    whoSolved: [
+        { 
+            user: { type: String },
+            code: { type: String },
+            language:{type:String}
+         }
+        ],
     output: { type: String },
     constraints: { type: String },
     timelimit: { type: Number, default: 5.0 },

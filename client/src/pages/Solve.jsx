@@ -18,8 +18,11 @@ const Solve = () => {
   useEffect(() => {
     const fetchProblem = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/getproblem/${id}`);
+        const email=localStorage.getItem('email');
+        const response = await axios.get(`http://localhost:8000/getproblem/${id}`,{email});
         setTestCase(response.data.problem.testcase);
+        setCode(response.data.problem.code)
+        setLanguage(response.data.problem.language);
         console.log(testcase);
         setProblem(response.data.problem);
       } catch (error) {
@@ -54,7 +57,8 @@ const Solve = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(`http://localhost:8000/submit/${id}`, { code, language, input });
+      const email=localStorage.getItem('email')
+      const response = await axios.post(`http://localhost:8000/submit/${id}`, { code, language, input,email });
       console.log(response.data.pass);
       //setOutput(response.data.output);
       setTestStatus(response.data.pass);
