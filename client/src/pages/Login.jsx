@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import axios from "axios";
 export default function Login() {
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); //useState is a React Hook that lets you add a state variable to your component.
   const [password, setPassword] = useState("");
   const [passwordstatus,setPasswordstatus]=useState("");
 

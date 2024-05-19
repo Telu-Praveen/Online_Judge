@@ -2,21 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom"
 import axios from 'axios';
-import {
-  Typography,
-  AppBar,
-  Toolbar,
-  Button,
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Container,
-} from '@mui/material';
+import {useAuth} from '../components/Auth.jsx'
+import {Typography,AppBar,Toolbar,Button,Box,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Container,} from '@mui/material';
 
 const Dashboard = () => {
   const [problems, setProblems] = useState([]);
@@ -29,11 +16,11 @@ const Dashboard = () => {
     // Redirect to the login page
     //history.push('/login');
   };
-  useEffect(() => {
+  useEffect(() => { //useEffect is a React Hook that lets you synchronize a component with an external system.
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:8000/getproblems');
-        console.log('API Response:', response); // Debugging
+        //console.log('API Response:', response); // Debugging
         if (response.data && response.data.problems) {
           setProblems(response.data.problems);
         } else {
@@ -46,6 +33,13 @@ const Dashboard = () => {
 
     fetchData();
   }, []);
+
+
+  const isLoggedIn = useAuth();
+
+  if (!isLoggedIn) {
+    return <div>Please log in</div>;
+  }
 
   if (problems.length === 0) {
     return <div>Loading or No Problems Found...</div>;

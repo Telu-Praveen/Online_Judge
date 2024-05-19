@@ -6,6 +6,7 @@ import Register from './pages/Register.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Solve from './pages/Solve.jsx';
 
+
 import './App.css'
 
 function App() {

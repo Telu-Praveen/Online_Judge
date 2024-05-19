@@ -3,11 +3,12 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Typography,Select, MenuItem, Button, TextField, Box,Grid, Paper } from '@mui/material';
 import CustomMonacoEditor from './CustomMonacoEditor.jsx';
+import { useAuth } from '../components/Auth.jsx';
 
 const Solve = () => {
   const { id } = useParams();
   const [problem, setProblem] = useState(null);
-  const [language, setLanguage] = useState('javascript');
+  const [language, setLanguage] = useState('java');
   const [code, setCode] = useState('');
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
@@ -31,7 +32,11 @@ const Solve = () => {
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
   };
+  const isLoggedIn = useAuth();
 
+  if (!isLoggedIn) {
+    return <div>Please log in</div>;
+  }
   const handleCodeChange = (newValue) => {
     setCode(newValue);
   };
@@ -75,7 +80,7 @@ const Solve = () => {
       <Grid item xs={12} md={4}>
         <Paper elevation={3} style={{ padding: '16px', margin: '16px' }}>
           <Typography variant="h4">{problem.name}</Typography>
-          <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>{problem.statement}</Typography>
+          <Typography variant="body1" style={{ whiteSpace: 'normal' }}>{problem.statement}</Typography>
           <Typography variant="h6" style={{ marginTop: '16px' }}>Test Cases</Typography>
           <p>Sample Input1</p>
           <Typography variant="body2" style={{ whiteSpace: 'pre-line' }}>{testcase[0].input}</Typography>
@@ -93,7 +98,6 @@ const Solve = () => {
         <Paper elevation={3} style={{ padding: '16px', margin: '16px' }}>
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
             <Select value={language} onChange={handleLanguageChange}>
-              <MenuItem value="javascript">JavaScript</MenuItem>
               <MenuItem value="python">Python</MenuItem>
               <MenuItem value="cpp">C++</MenuItem>
               <MenuItem value="java">Java</MenuItem>

@@ -39,22 +39,45 @@ const execute = (filepath, inputPath) => {
         fs.mkdirSync(outputPath, { recursive: true });
     }
     const jobId = path.basename(filepath).split(".")[0];
+    const language = path.basename(filepath).split(".")[1];
+    console.log(language)
     const outPath = path.join(outputPath, `${jobId}.out`);
 
-    return new Promise((resolve, reject) => {
-        exec(
-            `g++ ${filepath} -o ${outPath} && cd ${outputPath} && ./${jobId}.out < ${inputPath}`,
-            (error, stdout, stderr) => {
-                if (error) {
-                    reject({ error, stderr });
+    if (language == "c++") {
+        return new Promise((resolve, reject) => {
+            exec(
+                `g++ ${filepath} -o ${outPath} && cd ${outputPath} && ./${jobId}.out < ${inputPath}`,
+                (error, stdout, stderr) => {
+                    if (error) {
+                        reject({ error, stderr });
+                    }
+                    if (stderr) {
+                        reject(stderr);
+                    }
+                    resolve(stdout);
                 }
-                if (stderr) {
-                    reject(stderr);
-                }
-                resolve(stdout);
-            }
-        );
-    });
+            );
+        });
+    }
+    else if (language == "java") {
+        console.log("java code is compiling")
+        const execFile = `${jobId}.java`;
+        const output = new Promise((resolve, reject) => {
+            exec(`javac ${filepath} && java ${filepath} < ${inputPath}`,
+                (error, stdout, stderr) => {
+                    if (error) {
+                    //console.log(error)
+                       reject(error);
+                    }
+                    if (stderr) {
+                       reject(stderr);
+                    }
+                    resolve(stdout);
+                });
+        });
+        return output;
+    }
+
 };
 module.exports = {
     generateFile, generateInputFile, execute,

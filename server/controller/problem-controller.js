@@ -98,7 +98,7 @@ const runproblem = async (req, res) => {
         const output = await execute(filePath, inputPath);
         res.json({ filePath, inputPath, output });
     } catch (error) {
-        console.log(error);
+        res.json({error});
     }
 }
 
@@ -117,7 +117,7 @@ const submitproblem = async (req, res) => {
         expectedoutput=(String(problem.testcase[i].output)).trim();
         console.log(output+" "+expectedoutput)
         if(output==expectedoutput){
-
+            
              pass.push("Success");
         }
         else{
