@@ -21,7 +21,7 @@ const Solve = () => {
         const email=localStorage.getItem('email');
         const response = await axios.get(`http://localhost:8000/getproblem/${id}`,{email});
         setTestCase(response.data.problem.testcase);
-        setCode(response.data.problem.code)
+        //setCode(response.data.problem.code)
         setLanguage(response.data.problem.language);
         console.log(testcase);
         setProblem(response.data.problem);
@@ -43,17 +43,6 @@ const Solve = () => {
   const handleCodeChange = (newValue) => {
     setCode(newValue);
   };
-
-  // const handleSolve = async () => {
-  //   try {
-  //     const response = await axios.post(`http://localhost:8000/runproblem/${id}`, { solution });
-  //     alert(response.data.message);
-  //     setOutput(response.data.output);
-  //     setTestStatus(response.data.testStatus);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const handleSubmit = async () => {
     try {
@@ -81,7 +70,7 @@ const Solve = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={1} md={4}>
         <Paper elevation={3} style={{ padding: '16px', margin: '16px' }}>
           <Typography variant="h4">{problem.name}</Typography>
           <Typography variant="body1" style={{ whiteSpace: 'normal' }}>{problem.statement}</Typography>

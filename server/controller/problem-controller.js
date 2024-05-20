@@ -32,7 +32,7 @@ const addproblem = async (req, res) => {
 
 const getproblems = async (req, res) => {
     try {
-        const problems = await Problem.find();
+        const problems = await Problem.find().select("name _id");
         res.status(200).json({ problems });
     } catch (error) {
         console.log(error);

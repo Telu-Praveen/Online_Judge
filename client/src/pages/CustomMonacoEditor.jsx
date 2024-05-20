@@ -4,7 +4,7 @@ import Editor from '@monaco-editor/react';
 const CustomMonacoEditor = ({
   width = '100%',
   height = '400px',
-  language = 'javascript',
+  language = 'c++',
   theme = 'vs-dark',
   value = '',
   onChange,
