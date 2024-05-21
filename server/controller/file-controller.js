@@ -76,6 +76,23 @@ const execute = (filepath, inputPath) => {
         });
         return output;
     }
+    else if (language == "python") {
+        console.log("python code is compiling")
+        const execFile = `${jobId}.java`;
+        const output = new Promise((resolve, reject) => {
+            exec(`python3 ${filepath} ${inputPath}`,
+                (error, stdout, stderr) => {
+                    if (error) {
+                       reject(error);
+                    }
+                    if (stderr) {
+                       reject(stderr);
+                    }
+                    resolve(stdout);
+                });
+        });
+        return output;
+    }
 
 };
 module.exports = {

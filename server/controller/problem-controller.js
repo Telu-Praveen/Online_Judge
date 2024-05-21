@@ -43,16 +43,17 @@ const getproblems = async (req, res) => {
 const getproblem = async (req, res) => {
     try {
         const name = req.params.id;
-        const email = req.body.email;
-        console.log(name);
-        var code = "Base"
+        const email = req.query.email;
+        console.log(req.query)
+        //console.log(name);
+        var code1 = ""
         var language="cpp"
         const find_problem = await Problem.findById(req.params.id);
         if (!find_problem) return res.status(404).send('Problem not found');
 
         for (var i = 0; i < find_problem.whoSolved.length; i++) {
-            if (email == find_problem.whoSolved[i].email) {
-                code = find_problem.whoSolved[i].code,
+            if (email == find_problem.whoSolved[i].user) {
+                code1 = find_problem.whoSolved[i].code,
                 language=find_problem.whoSolved[i].language
 
             }
@@ -61,7 +62,7 @@ const getproblem = async (req, res) => {
             name: find_problem.name,
             statement: find_problem.statement,
             testcase: find_problem.testcase,
-            code: code,
+            code: code1,
             language:language,
             constraints: find_problem.constraints
         }
@@ -113,11 +114,18 @@ const runproblem = async (req, res) => {
     }
     try {
         const filePath = await generateFile(language, code);
+        if(filePath==="error"){
+            throw errorHandler(500, "Error Compiling Code");
+        }
         const inputPath = await generateInputFile(input);
+
         const output = await execute(filePath, inputPath);
         res.json({ filePath, inputPath, output });
     } catch (error) {
-        res.json({ error });
+        console.log(error)
+        const output=error.message;
+        res.status(200).json({output});
+       // res.json({ error });
     }
 }
 

@@ -19,9 +19,13 @@ const Solve = () => {
     const fetchProblem = async () => {
       try {
         const email=localStorage.getItem('email');
-        const response = await axios.get(`http://localhost:8000/getproblem/${id}`,{email});
+        const response = await axios.get(`http://localhost:8000/getproblem/${id}`,{
+          params:{
+            email:email
+          }
+        });
         setTestCase(response.data.problem.testcase);
-        //setCode(response.data.problem.code)
+        setCode(response.data.problem.code)
         setLanguage(response.data.problem.language);
         console.log(testcase);
         setProblem(response.data.problem);
@@ -59,6 +63,7 @@ const Solve = () => {
   const handlerun = async () => {
     try {
       const response = await axios.post('http://localhost:8000/run', { code, language, input });
+      console.log(response)
       setOutput(response.data.output);
       setTestStatus(response.data.testStatus);
     } catch (error) {
