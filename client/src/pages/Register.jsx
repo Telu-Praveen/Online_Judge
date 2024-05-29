@@ -152,10 +152,6 @@ export default function Register() {
               <a href="/" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"  >
                 Login
               </a>
-
-              <a  className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"  >
-                
-              </a>
             </p>
           </div>
         </div>
