@@ -22,14 +22,14 @@ export default function Register() {
         email,
         password
       };
-      const { data } = await axios.post('http://localhost:8000/register', payload)
+      const { data } = await axios.post('http://13.232.66.171:8000/register', payload)
       if (data) {
         console.log(data)
         if(data=="User already exists!"){
           console.log("User already exists!");
         }
         else{
-          navigate("/login");
+          navigate("/");
         }
         
       }
@@ -149,7 +149,7 @@ export default function Register() {
   
             <p className="mt-10 text-center text-sm text-gray-500">
               Already a member?{' '}
-              <a href="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"  >
+              <a href="/" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"  >
                 Login
               </a>
 

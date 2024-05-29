@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
+import dotenv from "dotenv";
 export default function Login() {
 
   const [email, setEmail] = useState(""); //useState is a React Hook that lets you add a state variable to your component.
@@ -15,7 +16,8 @@ export default function Login() {
         email,
         password
       };
-      const { data } = await axios.post('http://localhost:8000/login', payload)
+      //const server = process.env.server_url+"login";
+      const { data } = await axios.post('http://13.232.66.171:8000/login', payload)
       if (data) {
         console.log(data)
         localStorage.setItem('token', data.token);
@@ -26,7 +28,7 @@ export default function Login() {
       }
     } catch (error) {
       setPasswordstatus("Incorrect Password. Please Try again!!");
-      console.log(error.response.data)
+      //console.log(error.response.data)
     }
 
     //setOutput(data.output);

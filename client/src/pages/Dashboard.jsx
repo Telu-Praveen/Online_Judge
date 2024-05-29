@@ -12,14 +12,14 @@ const Dashboard = () => {
     // Clear any authentication tokens or user info stored in local storage
     localStorage.removeItem('token');
     localStorage.removeItem('email');
-    navigate("/login")
+    navigate("/")
     // Redirect to the login page
     //history.push('/login');
   };
   useEffect(() => { //useEffect is a React Hook that lets you synchronize a component with an external system.
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/getproblems');
+        const response = await axios.get('http://13.232.66.171:8000/getproblems');
         //console.log('API Response:', response); // Debugging
         if (response.data && response.data.problems) {
           setProblems(response.data.problems);
