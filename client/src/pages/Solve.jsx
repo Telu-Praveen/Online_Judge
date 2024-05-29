@@ -19,7 +19,7 @@ const Solve = () => {
     const fetchProblem = async () => {
       try {
         const email=localStorage.getItem('email');
-        const response = await axios.get(`http://13.232.66.171:8000/${id}`,{
+        const response = await axios.get(`http://13.232.66.171:8000/getproblem/${id}`,{
           params:{
             email:email
           }
