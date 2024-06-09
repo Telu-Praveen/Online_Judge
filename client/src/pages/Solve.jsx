@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Typography,Select, MenuItem, Button, TextField, Box,Grid, Paper } from '@mui/material';
+import { Typography, Select, MenuItem, Button, TextField, Box, Grid, Paper } from '@mui/material';
 import CustomMonacoEditor from './CustomMonacoEditor.jsx';
 import { useAuth } from '../components/Auth.jsx';
 
@@ -14,18 +14,19 @@ const Solve = () => {
   const [output, setOutput] = useState('');
   const [testStatus, setTestStatus] = useState('');
   const [testcase, setTestCase] = useState('null');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProblem = async () => {
       try {
-        const email=localStorage.getItem('email');
-        const response = await axios.get(`http://13.232.66.171:8000/getproblem/${id}`,{
-          params:{
-            email:email
+        const email = localStorage.getItem('email');
+        const response = await axios.get(`http://13.232.66.171:8000/getproblem/${id}`, {
+          params: {
+            email: email
           }
         });
         setTestCase(response.data.problem.testcase);
-        setCode(response.data.problem.code)
+        setCode(response.data.problem.code);
         setLanguage(response.data.problem.language);
         console.log(testcase);
         setProblem(response.data.problem);
@@ -36,45 +37,55 @@ const Solve = () => {
 
     fetchProblem();
   }, [id]);
+
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
   };
+
   const isLoggedIn = useAuth();
 
   if (!isLoggedIn) {
-    return (<div>
-      <p className="mt-10 text-center text-sm text-gray-500">
-        Dear User! Please {' '}
-        <a href="/" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"  >
-          Login
-        </a></p>
-    </div>
+    return (
+      <div>
+        <p className="mt-10 text-center text-sm text-gray-500">
+          Dear User! Please {' '}
+          <a href="/" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            Login
+          </a>
+        </p>
+      </div>
     );
   }
+
   const handleCodeChange = (newValue) => {
     setCode(newValue);
   };
 
   const handleSubmit = async () => {
     try {
-      const email=localStorage.getItem('email')
-      const response = await axios.post(`http://13.232.66.171:8000/submit/${id}`, { code, language, input,email });
+      setLoading(true);
+      const email = localStorage.getItem('email');
+      const response = await axios.post(`http://13.232.66.171:8000/submit/${id}`, { code, language, input, email });
       console.log(response.data.pass);
-      //setOutput(response.data.output);
       setTestStatus(response.data.pass);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handlerun = async () => {
     try {
+      setLoading(true);
       const response = await axios.post('http://13.232.66.171:8000/run', { code, language, input });
-      console.log(response)
+      console.log(response);
       setOutput(response.data.output);
       setTestStatus(response.data.testStatus);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,14 +120,14 @@ const Solve = () => {
             </Select>
           </Box>
           <Box>
-          <CustomMonacoEditor
-            width="100%"
-            height="400px"
-            language={language}
-            theme="vs-dark"
-            value={code}
-            onChange={handleCodeChange}
-          />
+            <CustomMonacoEditor
+              width="100%"
+              height="400px"
+              language={language}
+              theme="vs-dark"
+              value={code}
+              onChange={handleCodeChange}
+            />
           </Box>
           <Box mt={2}>
             <TextField
@@ -130,13 +141,12 @@ const Solve = () => {
             />
           </Box>
           <Box mt={2}>
-          <Button variant="contained" color="primary" onClick={handlerun} style={{ marginRight: '8px' }}>
-              run
+            <Button variant="contained" color="primary" onClick={handlerun} style={{ marginRight: '8px' }} disabled={loading}>
+              Run
             </Button>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
+            <Button variant="contained" color="primary" onClick={handleSubmit} disabled={loading}>
               Submit
             </Button>
-
           </Box>
           <Box mt={2}>
             <Typography variant="h6">Output:</Typography>
