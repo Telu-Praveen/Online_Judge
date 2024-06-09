@@ -4,6 +4,7 @@ import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Solve from './pages/Solve.jsx';
+import ProblemDashboard from './pages/ProblemDashboard.jsx';
 
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
       <Route exact path="/" element={<Login/>}/>
       <Route exact path="/register" element={<Register/>}/>
       <Route exact path="/dashboard" element={<Dashboard/>}/>
-      
+      <Route exact path="/problemdashboard" element={<ProblemDashboard/>}/>
       <Route exact path="/solve/:id" element={<Solve/>}/>
 
     </Routes>

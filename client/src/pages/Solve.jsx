@@ -42,7 +42,14 @@ const Solve = () => {
   const isLoggedIn = useAuth();
 
   if (!isLoggedIn) {
-    return <div>Please log in</div>;
+    return (<div>
+      <p className="mt-10 text-center text-sm text-gray-500">
+        Dear User! Please {' '}
+        <a href="/" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"  >
+          Login
+        </a></p>
+    </div>
+    );
   }
   const handleCodeChange = (newValue) => {
     setCode(newValue);

@@ -17,14 +17,23 @@ export default function Login() {
         password
       };
       //const server = process.env.server_url+"login";
+
+      
       const { data } = await axios.post('http://13.232.66.171:8000/login', payload)
       if (data) {
         console.log(data)
+        if(email=="admin@gmail.com"){
+          console.log("Admin Logged In")
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('email', email);
+          navigate("/problemdashboard");
+        }
+        else{
         localStorage.setItem('token', data.token);
         localStorage.setItem('email', email);
         console.log("navigating to home");
         navigate("/dashboard");
-        
+        }
       }
     } catch (error) {
       setPasswordstatus("Incorrect Password. Please Try again!!");
