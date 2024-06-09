@@ -67,7 +67,16 @@ const Solve = () => {
       const email = localStorage.getItem('email');
       const response = await axios.post(`http://13.232.66.171:8000/submit/${id}`, { code, language, input, email });
       console.log(response.data.pass);
-      setTestStatus(response.data.pass);
+      const outputs=response.data.pass;
+      for(var i=0;i<output.length;i++){
+        if(outputs[i]=="Fail"){
+          const fail=`Testcase ${i+1} Failed`
+          setTestStatus(fail);
+          break
+        }
+        setTestStatus("Accepted");
+      }
+      //setTestStatus(response.data.pass);
     } catch (error) {
       console.error(error);
     } finally {
@@ -80,7 +89,9 @@ const Solve = () => {
       setLoading(true);
       const response = await axios.post('http://13.232.66.171:8000/run', { code, language, input });
       console.log(response);
-      setOutput(response.data.output);
+      const splitString = response.data.output.split("txt");
+      const output=splitString[splitString.length-1]
+      setOutput(output);
       setTestStatus(response.data.testStatus);
     } catch (error) {
       console.error(error);
