@@ -9,12 +9,9 @@ const Dashboard = () => {
   const [problems, setProblems] = useState([]);
   const navigate=useNavigate();
   const handleLogout = () => {
-    // Clear any authentication tokens or user info stored in local storage
     localStorage.removeItem('token');
     localStorage.removeItem('email');
     navigate("/")
-    // Redirect to the login page
-    //history.push('/login');
   };
   useEffect(() => { //useEffect is a React Hook that lets you synchronize a component with an external system.
     const fetchData = async () => {

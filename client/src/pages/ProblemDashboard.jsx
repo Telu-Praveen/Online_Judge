@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom"
 import axios from 'axios';
 import {
   Typography,
@@ -19,12 +20,17 @@ const ProblemDashboard = () => {
   const [problems, setProblems] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [problemToEdit, setProblemToEdit] = useState(null);
+  const navigate=useNavigate();
 
   useEffect(() => {
     fetchProblems();
   }, []);
 
-
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    navigate("/")
+  };
   const fetchProblems = async () => {
     try {
       const response = await axios.get('http://13.232.66.171:8000/getproblems');
@@ -80,10 +86,14 @@ const ProblemDashboard = () => {
       <AppBar position="static">
         <Toolbar>
           <Box display="flex" flexGrow={1} justifyContent="space-between" color="Black">
-            <Typography variant="h6">Problem List</Typography>
-            <Button variant="contained" color="primary" onClick={handleDialogOpen}>
+            <Typography variant="h5">Problem List</Typography>
+            
+            <Button variant="contained" color="primary" onClick={handleDialogOpen} >
               Add Problem
             </Button>
+            <Button variant="contained" color="primary" onClick={handleLogout}>
+          Log out
+        </Button>
           </Box>
         </Toolbar>
       </AppBar>
