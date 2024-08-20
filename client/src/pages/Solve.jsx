@@ -20,7 +20,7 @@ const Solve = () => {
     const fetchProblem = async () => {
       try {
         const email = localStorage.getItem('email');
-        const response = await axios.get(`http://13.232.66.171:8000/getproblem/${id}`, {
+        const response = await axios.get(`http://13.127.150.73:8000/getproblem/${id}`, {
           params: {
             email: email
           }
@@ -87,7 +87,7 @@ const Solve = () => {
   const handlerun = async () => {
     try {
       setLoading(true);
-      const response = await axios.post('http://13.232.66.171:8000/run', { code, language, input });
+      const response = await axios.post('http://13.127.150.73:8000/run', { code, language, input });
       console.log(response);
       const splitString = response.data.output.split("txt");
       const output=splitString[splitString.length-1]
