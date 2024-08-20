@@ -19,7 +19,7 @@ export default function Login() {
       //const server = process.env.server_url+"login";
 
       
-      const { data } = await axios.post('http://13.232.66.171:8000/login', payload)
+      const { data } = await axios.post('http://13.127.150.73:8000/login', payload)
       if (data) {
         console.log(data)
         if(email=="admin@gmail.com"){

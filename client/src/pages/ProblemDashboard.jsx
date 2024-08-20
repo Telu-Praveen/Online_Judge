@@ -33,7 +33,7 @@ const ProblemDashboard = () => {
   };
   const fetchProblems = async () => {
     try {
-      const response = await axios.get('http://13.232.66.171:8000/getproblems');
+      const response = await axios.get('http://13.127.150.73:8000/getproblems');
       setProblems(response.data.problems);
     } catch (error) {
       console.error('Error fetching problems:', error);
@@ -42,7 +42,7 @@ const ProblemDashboard = () => {
 
   const deleteProblem = async (id) => {
     try {
-      await axios.delete(`http://13.232.66.171:8000/deleteproblem/${id}`);
+      await axios.delete(`http://13.127.150.73:8000/deleteproblem/${id}`);
       fetchProblems();
     } catch (error) {
       console.error('Error deleting problem:', error);
@@ -61,7 +61,7 @@ const ProblemDashboard = () => {
 
   const handleEditProblem = async (problem) => {
     console.log('Problem to Edit:', problem);
-    const response = await axios.get(`http://13.232.66.171:8000/getproblem/${problem._id}`);
+    const response = await axios.get(`http://13.127.150.73:8000/getproblem/${problem._id}`);
     console.log("response")
     problem.statement = response.data.problem.statement;
     problem.testcase = response.data.problem.testcase;

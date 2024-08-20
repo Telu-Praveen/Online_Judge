@@ -65,7 +65,7 @@ const Solve = () => {
     try {
       setLoading(true);
       const email = localStorage.getItem('email');
-      const response = await axios.post(`http://13.232.66.171:8000/submit/${id}`, { code, language, input, email });
+      const response = await axios.post(`http://13.127.150.73:8000/submit/${id}`, { code, language, input, email });
       console.log(response.data.pass);
       const outputs=response.data.pass;
       for(var i=0;i<output.length;i++){

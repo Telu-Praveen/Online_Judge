@@ -11,6 +11,7 @@ RUN apk update && apk add --no-cache g++ openjdk11-jdk python3
 # Copy only the package.json and package-lock.json files and install dependencies.
 # This allows Docker to cache this layer when package files don't change.
 COPY package*.json ./
+
 RUN npm install
 
 # Copy the rest of the application code.

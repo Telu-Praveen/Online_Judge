@@ -22,7 +22,7 @@ export default function Register() {
         email,
         password
       };
-      const { data } = await axios.post('http://13.232.66.171:8000/register', payload)
+      const { data } = await axios.post('http://13.127.150.73:8000/register', payload)
       if (data) {
         console.log(data)
         if(data=="User already exists!"){

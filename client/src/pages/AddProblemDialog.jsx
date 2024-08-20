@@ -39,10 +39,10 @@ const AddProblemDialog = ({ open, onClose, fetchProblems, problemToEdit }) => {
 
       if (problemToEdit) {
         console.log('Updating Problem:', problemToEdit._id);
-        const response = await axios.put(`http://13.232.66.171:8000/updateproblem/${problemToEdit._id}`, newProblem);
+        const response = await axios.put(`http://13.127.150.73:8000/updateproblem/${problemToEdit._id}`, newProblem);
         console.log('Update Response:', response.data);
       } else {
-        const response = await axios.post('http://13.232.66.171:8000/addproblem', newProblem);
+        const response = await axios.post('http://13.127.150.73:8000/addproblem', newProblem);
         console.log('Add Response:', response.data);
       }
 
